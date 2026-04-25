@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { MessageCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { siteConfig } from '@/config/site'
+import { Logo } from '@/components/ui/logo'
 
 const NAV_LINKS = [
   { href: '/', label: 'Inicio' },
@@ -38,11 +39,8 @@ export function Navbar() {
         aria-label="Navegación principal"
         className="mx-auto flex h-16 max-w-[var(--spacing-container)] items-center justify-between px-[var(--spacing-gutter)]"
       >
-        <Link
-          href="/"
-          className="font-heading text-lg font-bold text-primary"
-        >
-          {siteConfig.brand.name}
+        <Link href="/" aria-label={siteConfig.brand.name}>
+          <Logo />
         </Link>
 
         <ul className="hidden md:flex items-center gap-8 list-none">
