@@ -4,6 +4,7 @@ import './globals.css'
 import { siteConfig } from '@/config/site'
 import { Navbar } from '@/components/layout/navbar'
 import { Footer } from '@/components/layout/footer'
+import { WhatsAppButton } from '@/components/ui/whatsapp-button'
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -53,6 +54,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <WhatsAppButton variant="floating" />
       </body>
     </html>
   )
