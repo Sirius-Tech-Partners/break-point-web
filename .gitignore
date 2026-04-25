@@ -41,9 +41,9 @@ yarn-error.log*
 
 # BMAD planning tools — local only, not part of the deployable codebase
 _bmad/
-_bmad-output/
 .bmad-core/
 .claude/
+# _bmad-output/ is tracked by git (committed before this rule) — intentionally NOT ignored
 
 # typescript
 *.tsbuildinfo
