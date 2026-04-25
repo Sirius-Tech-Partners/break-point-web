@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Space_Grotesk, Manrope, Lexend } from 'next/font/google'
 import './globals.css'
 import { siteConfig } from '@/config/site'
+import { Navbar } from '@/components/layout/navbar'
+import { Footer } from '@/components/layout/footer'
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -39,7 +41,19 @@ export default function RootLayout({
       lang="es"
       className={`${spaceGrotesk.variable} ${manrope.variable} ${lexend.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded focus:bg-primary focus:px-4 focus:py-2 focus:text-white focus:outline-none"
+        >
+          Ir al contenido principal
+        </a>
+        <Navbar />
+        <main id="main-content" className="flex flex-col flex-1 pt-16">
+          {children}
+        </main>
+        <Footer />
+      </body>
     </html>
   )
 }
