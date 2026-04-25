@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Break Point — Design Directions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&family=Manrope:wght@400;500;600&family=Lexend:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --color-primary:        #00327d;
+      --color-primary-500:    #0047ab;
+      --color-cta:            #ff8a00;
+      --color-surface:        #faf8ff;
+      --color-surface-low:    #f3f3fc;
+      --color-dark:           #363636;
+      --color-dark-mid:       #4d4d4d;
+      --color-on-surface:     #191b22;
+      --color-on-surface-var: #434653;
+      --color-outline:        #737784;
+      --color-available:      #3d6b47;
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body:    'Manrope', sans-serif;
+      --font-ui:      'Lexend', sans-serif;
+      --radius-md: 0.75rem;
+      --radius-lg: 1rem;
+      --radius-full: 9999px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: #111;
+      color: #fff;
+    }
+
+    /* ── NAVIGATION ─────────────────────────────────────────── */
+    .nav-tabs {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: #111;
+      display: flex;
+      gap: 4px;
+      padding: 12px 24px;
+      border-bottom: 1px solid #333;
+    }
+    .nav-tabs button {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 20px;
+      border: 1px solid #444;
+      background: transparent;
+      color: #999;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-tabs button.active {
+      background: var(--color-cta);
+      border-color: var(--color-cta);
+      color: var(--color-on-surface);
+    }
+    .nav-tabs .label {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      color: #666;
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+    }
+
+    /* ── DIRECTION PANELS ───────────────────────────────────── */
+    .direction { display: none; padding-top: 56px; }
+    .direction.active { display: block; }
+
+    /* ── SHARED COMPONENTS ──────────────────────────────────── */
+    .btn-whatsapp {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--color-cta);
+      color: var(--color-on-surface);
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 16px;
+      padding: 14px 28px;
+      border-radius: var(--radius-full);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-whatsapp:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-whatsapp svg { width: 20px; height: 20px; fill: var(--color-on-surface); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: #fff;
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 15px;
+      padding: 13px 26px;
+      border-radius: var(--radius-full);
+      border: 1.5px solid rgba(255,255,255,0.4);
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover { border-color: #fff; background: rgba(255,255,255,0.08); }
+
+    .floating-wa {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      width: 56px; height: 56px;
+      background: var(--color-cta);
+      border-radius: var(--radius-full);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(255,138,0,0.4);
+      cursor: pointer;
+      z-index: 90;
+      transition: transform 0.2s;
+    }
+    .floating-wa:hover { transform: scale(1.08); }
+    .floating-wa svg { width: 26px; height: 26px; fill: var(--color-on-surface); }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 5px 14px;
+      border-radius: var(--radius-full);
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .chip.blue {
+      background: rgba(0,71,171,0.15);
+      color: #a5bdff;
+      border-color: rgba(0,71,171,0.3);
+    }
+    .chip.green {
+      background: rgba(61,107,71,0.2);
+      color: #86c99a;
+      border-color: rgba(61,107,71,0.3);
+    }
+
+    /* ── DIRECTION A: FIELD FIRST (Light) ────────────────────── */
+    #dir-a .navbar {
+      position: absolute; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 48px;
+      z-index: 10;
+    }
+    #dir-a .logo {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    #dir-a .logo span { color: var(--color-cta); }
+    #dir-a .nav-links {
+      display: flex; gap: 32px;
+      font-family: var(--font-ui);
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+      list-style: none;
+    }
+    #dir-a .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      background: linear-gradient(135deg, #0a1628 0%, #1a3a6b 40%, #2d5a3d 100%);
+      display: flex; flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #dir-a .hero-field-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 60% 50%, rgba(61,107,71,0.3) 0%, transparent 60%),
+        linear-gradient(160deg, #0d1f3c 0%, #1a3a6b 50%, #0d3320 100%);
+    }
+    #dir-a .hero-lines {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    #dir-a .field-art {
+      position: absolute;
+      right: 8%;
+      bottom: 0;
+      width: 52%;
+      height: 90%;
+      background:
+        radial-gradient(ellipse at 50% 80%, rgba(61,107,71,0.6) 0%, transparent 50%),
+        linear-gradient(180deg, transparent 20%, rgba(0,50,125,0.2) 100%);
+      border-radius: 120px 120px 0 0;
+      border: 1.5px solid rgba(61,107,71,0.3);
+      overflow: hidden;
+    }
+    #dir-a .field-art::after {
+      content: '';
+      position: absolute;
+      top: 30%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px; height: 120px;
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+    }
+    #dir-a .field-art::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 40%;
+      background: linear-gradient(0deg, rgba(61,107,71,0.4) 0%, transparent 100%);
+    }
+    #dir-a .hero-content {
+      position: relative;
+      z-index: 5;
+      padding: 0 48px;
+      max-width: 600px;
+    }
+    #dir-a .hero-eyebrow {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-cta);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    #dir-a .hero h1 {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: clamp(42px, 5vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    #dir-a .hero h1 em {
+      font-style: normal;
+      color: var(--color-cta);
+    }
+    #dir-a .hero p {
+      font-family: var(--font-body);
+      font-size: 18px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.6;
+      margin-bottom: 36px;
+      max-width: 480px;
+    }
+    #dir-a .hero-ctas {
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+    #dir-a .hero-scroll {
+      position: absolute;
+      bottom: 32px; left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-ui);
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    #dir-a .hero-scroll::after {
+      content: '';
+      width: 1px; height: 40px;
+      background: linear-gradient(rgba(255,255,255,0.3), transparent);
+    }
+
+    /* Segment Cards */
+    #dir-a .segments {
+      background: var(--color-surface);
+      padding: 80px 48px;
+    }
+    #dir-a .segments h2 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-on-surface-var);
+      margin-bottom: 40px;
+    }
+    #dir-a .segment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 900px;
+    }
+    #dir-a .segment-card {
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      display: flex; flex-direction: column;
+      gap: 16px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    #dir-a .segment-card:hover { transform: translateY(-3px); }
+    #dir-a .segment-card.cancha {
+      background: var(--color-primary);
+      color: #fff;
+    }
+    #dir-a .segment-card.eventos {
+      background: var(--color-dark);
+      color: #fff;
+      border: 1px solid rgba(255,138,0,0.2);
+    }
+    #dir-a .segment-card.eventos::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-cta), transparent);
+    }
+    #dir-a .segment-icon {
+      font-size: 36px;
+    }
+    #dir-a .segment-card h3 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+    #dir-a .segment-card p {
+      font-size: 15px;
+      opacity: 0.75;
+      line-height: 1.5;
+    }
+    #dir-a .segment-arrow {
+      margin-top: auto;
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 500;
+      display: flex; align-items: center; gap: 8px;
+    }
+    #dir-a .segment-card.cancha .segment-arrow { color: rgba(255,255,255,0.7); }
+    #dir-a .segment-card.eventos .segment-arrow { color: var(--color-cta); }
+
+    /* Amenities */
+    #dir-a .amenities {
+      background: var(--color-dark);
+      padding: 80px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    #dir-a .amenities::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-available), transparent);
+    }
+    #dir-a .amenities h2 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 36px;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    #dir-a .amenities p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 48px;
+    }
+    #dir-a .amenity-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 24px;
+    }
+    #dir-a .amenity-item {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 12px; text-align: center;
+    }
+    #dir-a .amenity-icon {
+      width: 56px; height: 56px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+    }
+    #dir-a .amenity-name {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.75);
+    }
+
+    /* Pricing preview */
+    #dir-a .pricing-preview {
+      background: var(--color-surface);
+      padding: 80px 48px;
+    }
+    #dir-a .pricing-preview h2 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 36px;
+      letter-spacing: -0.02em;
+      color: var(--color-on-surface);
+      margin-bottom: 48px;
+    }
+    #dir-a .price-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 900px;
+    }
+    #dir-a .price-card {
+      background: #fff;
+      border: 1px solid #e7e7f0;
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+    }
+    #dir-a .price-card .type {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-on-surface-var);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    #dir-a .price-card .amount {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 40px;
+      letter-spacing: -0.02em;
+      color: var(--color-primary);
+      line-height: 1;
+    }
+    #dir-a .price-card .unit {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--color-on-surface-var);
+      margin-top: 4px;
+      margin-bottom: 20px;
+    }
+    #dir-a .price-card.featured {
+      border-color: var(--color-cta);
+      position: relative;
+    }
+    #dir-a .price-card.featured::before {
+      content: 'Más completo';
+      position: absolute; top: -12px; left: 24px;
+      background: var(--color-cta);
+      color: var(--color-on-surface);
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+    }
+
+    /* ── DIRECTION B: BOLD INDUSTRIAL (Dark-first) ──────────── */
+    #dir-b .navbar {
+      position: absolute; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 48px;
+      z-index: 10;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    #dir-b .logo {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    #dir-b .nav-links {
+      display: flex; gap: 32px;
+      font-family: var(--font-ui);
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      list-style: none;
+    }
+    #dir-b .hero {
+      position: relative;
+      min-height: 100vh;
+      background: var(--color-dark);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+    #dir-b .hero-left {
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 120px 64px 80px;
+      position: relative;
+      z-index: 5;
+    }
+    #dir-b .hero-right {
+      position: relative;
+      background: linear-gradient(135deg, rgba(0,50,125,0.4), rgba(61,107,71,0.3));
+      overflow: hidden;
+    }
+    #dir-b .hero-right::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 40% 60%, rgba(61,107,71,0.5) 0%, transparent 50%),
+        radial-gradient(circle at 70% 30%, rgba(0,71,171,0.3) 0%, transparent 40%);
+    }
+    #dir-b .field-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    #dir-b .field-circle {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px; height: 200px;
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: 50%;
+    }
+    #dir-b .field-line {
+      position: absolute;
+      top: 0; bottom: 0; left: 50%;
+      width: 1.5px;
+      background: rgba(255,255,255,0.08);
+    }
+    #dir-b .availability-badge {
+      position: absolute;
+      top: 32px; right: 32px;
+      background: rgba(61,107,71,0.2);
+      border: 1px solid rgba(61,107,71,0.4);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    #dir-b .availability-badge .dot {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-ui);
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+    }
+    #dir-b .availability-badge .dot::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--color-available);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    #dir-b .hero-tag {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-cta);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    #dir-b .hero-tag::before {
+      content: '';
+      width: 32px; height: 1.5px;
+      background: var(--color-cta);
+    }
+    #dir-b .hero h1 {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: clamp(48px, 4.5vw, 72px);
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 24px;
+    }
+    #dir-b .hero h1 .highlight {
+      color: var(--color-cta);
+      display: block;
+    }
+    #dir-b .hero p {
+      font-size: 17px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.65;
+      margin-bottom: 40px;
+      max-width: 420px;
+    }
+    #dir-b .hero-stats {
+      display: flex; gap: 32px;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    #dir-b .stat-item { display: flex; flex-direction: column; gap: 4px; }
+    #dir-b .stat-num {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    #dir-b .stat-label {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      color: rgba(255,255,255,0.45);
+      font-weight: 500;
+    }
+
+    /* Alternating sections dir-b */
+    #dir-b .section-light {
+      background: var(--color-surface);
+      padding: 80px 48px;
+    }
+    #dir-b .section-dark {
+      background: var(--color-dark);
+      padding: 80px 48px;
+      position: relative;
+    }
+    #dir-b .section-dark::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1.5px;
+      background: linear-gradient(90deg, var(--color-available), transparent 60%);
+    }
+    #dir-b .section-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 36px;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    #dir-b .section-sub {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 48px;
+      opacity: 0.65;
+    }
+    #dir-b .segment-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    #dir-b .seg-card {
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      position: relative; overflow: hidden;
+    }
+    #dir-b .seg-card:hover { transform: translateY(-2px); }
+    #dir-b .seg-card.blue {
+      background: var(--color-primary);
+    }
+    #dir-b .seg-card.orange {
+      background: rgba(255,138,0,0.1);
+      border: 1px solid rgba(255,138,0,0.25);
+    }
+    #dir-b .seg-card .seg-num {
+      font-family: var(--font-heading);
+      font-size: 72px;
+      font-weight: 800;
+      line-height: 1;
+      opacity: 0.12;
+      position: absolute;
+      bottom: -8px; right: 16px;
+      letter-spacing: -0.04em;
+    }
+    #dir-b .seg-card h3 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    #dir-b .seg-card p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    #dir-b .seg-link {
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    #dir-b .seg-card.blue .seg-link { color: rgba(255,255,255,0.7); }
+    #dir-b .seg-card.orange .seg-link { color: var(--color-cta); }
+
+    /* ── DIRECTION C: SPLIT HERO (Bifurcation-first) ─────────── */
+    #dir-c .navbar {
+      position: absolute; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px 48px;
+      z-index: 10;
+    }
+    #dir-c .logo {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      color: #fff;
+      text-align: center;
+    }
+    #dir-c .logo .tagline {
+      display: block;
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    #dir-c .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    #dir-c .hero-half {
+      position: relative;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 48px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: flex-basis 0.4s ease;
+    }
+    #dir-c .hero-half:hover { flex-grow: 1.15; }
+    #dir-c .hero-half.cancha {
+      background: linear-gradient(160deg, #0d1f3c 0%, #1a3564 60%, #0d2d1a 100%);
+    }
+    #dir-c .hero-half.eventos {
+      background: linear-gradient(200deg, #2a1a0a 0%, #3d2000 50%, #1a1a1a 100%);
+    }
+    #dir-c .half-bg-cancha {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 40% 40%, rgba(0,71,171,0.35) 0%, transparent 55%),
+        radial-gradient(ellipse at 70% 70%, rgba(61,107,71,0.25) 0%, transparent 40%);
+    }
+    #dir-c .half-bg-eventos {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 60% 40%, rgba(255,138,0,0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 30% 70%, rgba(100,40,0,0.3) 0%, transparent 40%);
+    }
+    #dir-c .half-divider {
+      position: absolute;
+      top: 0; bottom: 0; right: 0;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(255,255,255,0.2) 50%, transparent);
+    }
+    #dir-c .half-content {
+      position: relative; z-index: 5;
+    }
+    #dir-c .half-label {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    #dir-c .hero-half.cancha .half-label { color: #a5bdff; }
+    #dir-c .hero-half.eventos .half-label { color: var(--color-cta); }
+    #dir-c .half-content h2 {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: clamp(32px, 3.5vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    #dir-c .half-content p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.55;
+      margin-bottom: 28px;
+      max-width: 320px;
+    }
+    #dir-c .half-price {
+      display: inline-flex; align-items: baseline; gap: 6px;
+      margin-bottom: 24px;
+    }
+    #dir-c .half-price .bs {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+    }
+    #dir-c .half-price .amount {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 40px;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    #dir-c .half-price .period {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+    }
+    #dir-c .hero-half.cancha .btn-half {
+      background: var(--color-primary-500);
+      color: #fff;
+      border: none;
+    }
+    #dir-c .hero-half.eventos .btn-half {
+      background: var(--color-cta);
+      color: var(--color-on-surface);
+      border: none;
+    }
+    .btn-half {
+      display: inline-flex;
+      align-items: center; gap: 8px;
+      font-family: var(--font-ui);
+      font-weight: 500;
+      font-size: 15px;
+      padding: 13px 24px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      text-decoration: none;
+    }
+    .btn-half:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    #dir-c .center-logo {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+      width: 72px; height: 72px;
+      background: rgba(0,0,0,0.7);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: -0.01em;
+      color: #fff;
+      text-align: center;
+      line-height: 1.2;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Below the fold - dir-c */
+    #dir-c .below-fold {
+      background: var(--color-surface);
+      padding: 80px 48px;
+    }
+    #dir-c .below-fold h2 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 36px;
+      letter-spacing: -0.02em;
+      color: var(--color-on-surface);
+      margin-bottom: 8px;
+    }
+    #dir-c .below-fold .sub {
+      font-size: 17px;
+      color: var(--color-on-surface-var);
+      margin-bottom: 48px;
+    }
+
+    /* ── SHARED AMENITY LIST ─────────────────────────────────── */
+    .amenity-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+    .amenity-cell {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 10px; text-align: center;
+    }
+    .amenity-cell .ic {
+      width: 52px; height: 52px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .amenity-cell.dark .ic {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .amenity-cell.light .ic {
+      background: var(--color-surface-low);
+      border: 1px solid #e7e7f0;
+    }
+    .amenity-cell .nm {
+      font-family: var(--font-ui);
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .amenity-cell.dark .nm { color: rgba(255,255,255,0.7); }
+    .amenity-cell.light .nm { color: var(--color-on-surface-var); }
+
+    /* ── COMPARISON FOOTER ──────────────────────────────────── */
+    .comparison {
+      background: #1a1a1a;
+      padding: 48px;
+      text-align: center;
+    }
+    .comparison h3 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 32px;
+    }
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .comp-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .comp-card:hover, .comp-card.active {
+      border-color: var(--color-cta);
+      background: rgba(255,138,0,0.06);
+    }
+    .comp-card .dir-label {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-cta);
+      margin-bottom: 8px;
+    }
+    .comp-card .dir-name {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .comp-card .dir-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV TABS -->
+<nav class="nav-tabs">
+  <button class="active" onclick="showDir('a', this)">Dirección A — Field First</button>
+  <button onclick="showDir('b', this)">Dirección B — Bold Industrial</button>
+  <button onclick="showDir('c', this)">Dirección C — Split Segment</button>
+  <span class="label">Break Point Web · UX Design Directions</span>
+</nav>
+
+<!-- FLOATING WHATSAPP -->
+<div class="floating-wa" title="WhatsApp flotante — aparece en todas las páginas">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- DIRECTION A: FIELD FIRST                                    -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="dir-a" class="direction active">
+
+  <!-- Hero -->
+  <section class="hero">
+    <nav class="navbar">
+      <div class="logo">BREAK <span>POINT</span></div>
+      <ul class="nav-links">
+        <li>Inicio</li>
+        <li>La Cancha</li>
+        <li>Eventos</li>
+      </ul>
+      <a class="btn-whatsapp" style="padding:10px 20px;font-size:14px;">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </a>
+    </nav>
+    <div class="hero-field-bg"></div>
+    <div class="hero-lines"></div>
+    <div class="field-art"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">📍 Barrio Caliri · Zona Sur · La Paz</div>
+      <h1>Tu lugar.<br>Tu <em>momento.</em></h1>
+      <p>Cancha de pasto sintético, salón, BBQ y más. El lugar entero es tuyo — sin extraños, sin compartir.</p>
+      <div class="hero-ctas">
+        <a class="btn-whatsapp">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Reservar ahora
+        </a>
+        <a class="btn-secondary">Ver precios →</a>
+      </div>
+    </div>
+    <div class="hero-scroll">Scroll para explorar</div>
+  </section>
+
+  <!-- Segment Cards -->
+  <section class="segments">
+    <h2>¿Qué estás buscando?</h2>
+    <div class="segment-grid">
+      <div class="segment-card cancha">
+        <div class="segment-icon">⚽</div>
+        <h3>La Cancha</h3>
+        <p>Pasto sintético · Iluminación LED · 5v5 · Bs 120–130/hr</p>
+        <div class="segment-arrow">Reservar cancha →</div>
+      </div>
+      <div class="segment-card eventos">
+        <div class="segment-icon">🎉</div>
+        <h3>Eventos</h3>
+        <p>Salón 70–100 personas · BBQ · Cocina · Bs 250/hr · Mín 3hrs</p>
+        <div class="segment-arrow">Ver paquetes →</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Amenities -->
+  <section class="amenities">
+    <h2>Todo incluido en tu reserva</h2>
+    <p>No necesitas traer nada. No necesitas coordinar nada más.</p>
+    <div class="amenity-grid">
+      <div class="amenity-item"><div class="amenity-icon">⚽</div><div class="amenity-name">Cancha sintética</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🏠</div><div class="amenity-name">Salón eventos</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🔥</div><div class="amenity-name">Parrilla BBQ</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🍳</div><div class="amenity-name">Cocina equipada</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🏓</div><div class="amenity-name">Futbolín</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🤸</div><div class="amenity-name">Trampolín</div></div>
+      <div class="amenity-item"><div class="amenity-icon">⛺</div><div class="amenity-name">Carpa · Sombrillas</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🪑</div><div class="amenity-name">Mesas y sillas</div></div>
+      <div class="amenity-item"><div class="amenity-icon">💡</div><div class="amenity-name">Iluminación LED</div></div>
+      <div class="amenity-item"><div class="amenity-icon">🚿</div><div class="amenity-name">Baños</div></div>
+    </div>
+  </section>
+
+  <!-- Pricing Preview -->
+  <section class="pricing-preview">
+    <h2>Precios transparentes</h2>
+    <div class="price-cards">
+      <div class="price-card">
+        <div class="type">Cancha · Día</div>
+        <div class="amount">120</div>
+        <div class="unit">Bs / hora</div>
+        <span class="chip blue">Lunes – Viernes</span>
+      </div>
+      <div class="price-card">
+        <div class="type">Cancha · Noche</div>
+        <div class="amount">130</div>
+        <div class="unit">Bs / hora</div>
+        <span class="chip blue">Con iluminación</span>
+      </div>
+      <div class="price-card featured">
+        <div class="type">Complejo completo</div>
+        <div class="amount">250</div>
+        <div class="unit">Bs / hora · mín 3 hrs</div>
+        <span class="chip" style="background:rgba(255,138,0,0.1);color:var(--color-cta);border-color:rgba(255,138,0,0.3);">Salón + BBQ + Cancha</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- DIRECTION B: BOLD INDUSTRIAL                                -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="dir-b" class="direction">
+
+  <section class="hero">
+    <nav class="navbar">
+      <div class="logo">BREAK POINT</div>
+      <ul class="nav-links">
+        <li>Inicio</li><li>La Cancha</li><li>Eventos</li>
+      </ul>
+      <a class="btn-whatsapp" style="padding:10px 20px;font-size:14px;">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </a>
+    </nav>
+
+    <div class="hero-left">
+      <div class="hero-tag">Barrio Caliri · Zona Sur</div>
+      <h1>Juega.<br>Celebra.<br><span class="highlight">Disfruta.</span></h1>
+      <p>El complejo deportivo privado de zona sur. Cancha sintética, salón de eventos, BBQ y más — todo el lugar es tuyo.</p>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;">
+        <a class="btn-whatsapp">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Contactar ahora
+        </a>
+        <a class="btn-secondary">Ver instalaciones</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">5v5</div>
+          <div class="stat-label">Cancha FIFA</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">100</div>
+          <div class="stat-label">Personas máx.</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">10+</div>
+          <div class="stat-label">Amenidades</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="field-grid"></div>
+      <div class="field-line"></div>
+      <div class="field-circle"></div>
+      <div class="availability-badge">
+        <div class="dot">Lu–Vi 18:00–22:00</div>
+        <div class="dot">Sáb 08:00–14:00</div>
+        <div class="dot">Dom disponible</div>
+      </div>
+      <div style="position:absolute;bottom:48px;left:48px;right:48px;">
+        <div style="font-family:var(--font-ui);font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">Precio desde</div>
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:56px;letter-spacing:-0.03em;color:#fff;line-height:1;">Bs 120<span style="font-size:22px;font-weight:500;color:rgba(255,255,255,0.4)">/hr</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-light">
+    <div style="color:var(--color-on-surface)">
+      <h2 class="section-title" style="color:var(--color-on-surface);">¿Para qué lo necesitas?</h2>
+      <p class="section-sub" style="color:var(--color-on-surface-var);">Elige tu experiencia — cada una tiene su precio, sus condiciones y su CTA.</p>
+    </div>
+    <div class="segment-row">
+      <div class="seg-card blue">
+        <div class="seg-num">01</div>
+        <h3>La Cancha</h3>
+        <p>Fútbol 5v5 en pasto sintético con iluminación. Ideal para grupos de amigos o colegas.</p>
+        <div style="margin-bottom:16px;">
+          <span class="chip" style="background:rgba(165,189,255,0.1);color:#a5bdff;border-color:rgba(165,189,255,0.2);">Bs 120/hr día</span>
+          &nbsp;
+          <span class="chip" style="background:rgba(165,189,255,0.1);color:#a5bdff;border-color:rgba(165,189,255,0.2);">Bs 130/hr noche</span>
+        </div>
+        <a class="seg-link">Reservar cancha →</a>
+      </div>
+      <div class="seg-card orange">
+        <div class="seg-num">02</div>
+        <h3>Eventos</h3>
+        <p>Complejo completo: cancha + salón + BBQ + cocina. Cumpleaños, corporativos, reuniones.</p>
+        <div style="margin-bottom:16px;">
+          <span class="chip" style="background:rgba(255,138,0,0.1);color:var(--color-cta);border-color:rgba(255,138,0,0.25);">Bs 250/hr · mín 3hrs</span>
+        </div>
+        <a class="seg-link">Ver paquetes →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-dark">
+    <h2 class="section-title" style="color:#fff;">Todo el lugar es tuyo</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,0.6);">10 amenidades incluidas en cada reserva de evento.</p>
+    <div class="amenity-row">
+      <div class="amenity-cell dark"><div class="ic">⚽</div><div class="nm">Cancha sintética</div></div>
+      <div class="amenity-cell dark"><div class="ic">🏠</div><div class="nm">Salón 100p</div></div>
+      <div class="amenity-cell dark"><div class="ic">🔥</div><div class="nm">Parrilla BBQ</div></div>
+      <div class="amenity-cell dark"><div class="ic">🍳</div><div class="nm">Cocina</div></div>
+      <div class="amenity-cell dark"><div class="ic">🏓</div><div class="nm">Futbolín</div></div>
+      <div class="amenity-cell dark"><div class="ic">🤸</div><div class="nm">Trampolín</div></div>
+      <div class="amenity-cell dark"><div class="ic">⛺</div><div class="nm">Carpa</div></div>
+      <div class="amenity-cell dark"><div class="ic">🪑</div><div class="nm">Mesas y sillas</div></div>
+      <div class="amenity-cell dark"><div class="ic">💡</div><div class="nm">Iluminación</div></div>
+      <div class="amenity-cell dark"><div class="ic">🚿</div><div class="nm">Baños</div></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- DIRECTION C: SPLIT SEGMENT                                  -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="dir-c" class="direction">
+
+  <section class="hero" style="position:relative;">
+    <nav class="navbar">
+      <div class="logo">
+        BREAK POINT
+        <span class="tagline">Juega · Celebra · Disfruta</span>
+      </div>
+    </nav>
+
+    <div class="center-logo">BP</div>
+
+    <!-- Left: La Cancha -->
+    <div class="hero-half cancha">
+      <div class="half-bg-cancha"></div>
+      <div class="half-divider"></div>
+      <div class="half-content">
+        <div class="half-label">La Cancha</div>
+        <h2>Juega en<br>pasto sintético</h2>
+        <p>5v5 · Iluminación LED · Zona sur · Disponible noches y fines de semana</p>
+        <div class="half-price">
+          <span class="bs">Bs</span>
+          <span class="amount">130</span>
+          <span class="period">/hora</span>
+        </div>
+        <a class="btn-half">Reservar cancha →</a>
+      </div>
+    </div>
+
+    <!-- Right: Eventos -->
+    <div class="hero-half eventos">
+      <div class="half-bg-eventos"></div>
+      <div class="half-content">
+        <div class="half-label">Eventos</div>
+        <h2>Celebra con<br>todo incluido</h2>
+        <p>Salón · BBQ · Cocina · Trampolín · Hasta 100 personas · El lugar es tuyo</p>
+        <div class="half-price">
+          <span class="bs">Bs</span>
+          <span class="amount">250</span>
+          <span class="period">/hora · mín 3hrs</span>
+        </div>
+        <a class="btn-half">Ver paquetes →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Below fold -->
+  <section class="below-fold">
+    <h2>Todo en un solo lugar</h2>
+    <p class="sub">Cancha, salón, BBQ, cocina y más. Sin extraños, sin compartir.</p>
+    <div class="amenity-row">
+      <div class="amenity-cell light"><div class="ic">⚽</div><div class="nm">Cancha sintética</div></div>
+      <div class="amenity-cell light"><div class="ic">🏠</div><div class="nm">Salón 100p</div></div>
+      <div class="amenity-cell light"><div class="ic">🔥</div><div class="nm">Parrilla BBQ</div></div>
+      <div class="amenity-cell light"><div class="ic">🍳</div><div class="nm">Cocina</div></div>
+      <div class="amenity-cell light"><div class="ic">🏓</div><div class="nm">Futbolín</div></div>
+      <div class="amenity-cell light"><div class="ic">🤸</div><div class="nm">Trampolín</div></div>
+      <div class="amenity-cell light"><div class="ic">⛺</div><div class="nm">Carpa</div></div>
+      <div class="amenity-cell light"><div class="ic">🪑</div><div class="nm">Mesas y sillas</div></div>
+      <div class="amenity-cell light"><div class="ic">💡</div><div class="nm">Iluminación</div></div>
+      <div class="amenity-cell light"><div class="ic">🚿</div><div class="nm">Baños</div></div>
+    </div>
+  </section>
+
+  <section style="background:var(--color-dark);padding:80px 48px;position:relative;">
+    <div style="position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,var(--color-cta),transparent 60%);"></div>
+    <div style="max-width:600px;">
+      <div style="font-family:var(--font-ui);font-size:12px;font-weight:500;color:var(--color-cta);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:16px;">Exclusividad por diseño</div>
+      <h2 style="font-family:var(--font-heading);font-weight:800;font-size:42px;letter-spacing:-0.02em;color:#fff;line-height:1.1;margin-bottom:20px;">El lugar es tuyo.<br>Solo tu grupo.</h2>
+      <p style="font-size:17px;color:rgba(255,255,255,0.65);line-height:1.65;margin-bottom:36px;">Cuando reservas Break Point, no compartes el espacio con extraños. El complejo completo es exclusivo para tu grupo durante toda la duración de tu evento.</p>
+      <a class="btn-whatsapp">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Consultar disponibilidad
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<!-- COMPARISON -->
+<div class="comparison">
+  <h3>Compara las 3 direcciones</h3>
+  <div class="comparison-grid">
+    <div class="comp-card active" onclick="showDir('a',null);setActive(this)">
+      <div class="dir-label">Dirección A</div>
+      <div class="dir-name">Field First</div>
+      <div class="dir-desc">Hero inmersivo con campo como protagonista. Bifurcación debajo del fold. Más cinematográfico.</div>
+    </div>
+    <div class="comp-card" onclick="showDir('b',null);setActive(this)">
+      <div class="dir-label">Dirección B</div>
+      <div class="dir-name">Bold Industrial</div>
+      <div class="dir-desc">Layout dividido en hero. Estadísticas visibles. Más editorial y de alto impacto. Transmite datos rápido.</div>
+    </div>
+    <div class="comp-card" onclick="showDir('c',null);setActive(this)">
+      <div class="dir-label">Dirección C</div>
+      <div class="dir-name">Split Segment</div>
+      <div class="dir-desc">Bifurcación inmediata en el fold. El visitante elige su camino al instante. Más directo y funcional.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showDir(id, btn) {
+    document.querySelectorAll('.direction').forEach(d => d.classList.remove('active'));
+    document.getElementById('dir-' + id).classList.add('active');
+    if (btn) {
+      document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  }
+  function setActive(el) {
+    document.querySelectorAll('.comp-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
