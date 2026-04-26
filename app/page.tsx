@@ -45,9 +45,11 @@ export default function HomePage() {
             <h2 className="font-heading text-3xl font-bold text-white md:text-4xl">
               ¿Listo para reservar?
             </h2>
-            <p className="max-w-md font-body text-base text-white/70">
-              Escribinos por WhatsApp y te confirmamos disponibilidad en minutos.
-            </p>
+            <div className="flex w-full justify-center px-4">
+              <p className="text-center font-body text-base text-white/70">
+                Escribinos por WhatsApp y te confirmamos disponibilidad en minutos.
+              </p>
+            </div>
             <WhatsAppButton variant="inline" page="home" />
           </div>
         </section>
