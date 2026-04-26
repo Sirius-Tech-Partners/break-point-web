@@ -2,8 +2,10 @@ import { HeroSection } from '@/components/sections/hero-section'
 import { SegmentCards } from '@/components/sections/segment-cards'
 import { AmenitiesGrid } from '@/components/sections/amenities-grid'
 import { GalleryGrid } from '@/components/sections/gallery-grid'
+import { FaqSection } from '@/components/sections/faq-section'
 import { AvailabilityBadge } from '@/components/ui/availability-badge'
 import { WhatsAppButton } from '@/components/ui/whatsapp-button'
+import { AnimatedSection } from '@/components/ui/animated-section'
 import { siteConfig } from '@/config/site'
 
 export default function HomePage() {
@@ -22,9 +24,34 @@ export default function HomePage() {
 
         <WhatsAppButton variant="inline" page="home" />
       </HeroSection>
-      <SegmentCards />
-      <AmenitiesGrid />
-      <GalleryGrid />
+
+      <AnimatedSection delay={0}>
+        <SegmentCards />
+      </AnimatedSection>
+
+      <AnimatedSection delay={0.1}>
+        <AmenitiesGrid />
+      </AnimatedSection>
+
+      <AnimatedSection delay={0.2}>
+        <GalleryGrid />
+      </AnimatedSection>
+
+      <FaqSection />
+
+      <AnimatedSection delay={0.3}>
+        <section className="w-full bg-dark py-[var(--spacing-xl)]">
+          <div className="mx-auto flex max-w-[var(--spacing-container)] flex-col items-center gap-6 px-[var(--spacing-gutter)] text-center">
+            <h2 className="font-heading text-3xl font-bold text-white md:text-4xl">
+              ¿Listo para reservar?
+            </h2>
+            <p className="max-w-md font-body text-base text-white/70">
+              Escribinos por WhatsApp y te confirmamos disponibilidad en minutos.
+            </p>
+            <WhatsAppButton variant="inline" page="home" />
+          </div>
+        </section>
+      </AnimatedSection>
     </>
   )
 }
