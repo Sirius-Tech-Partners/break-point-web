@@ -6,7 +6,7 @@ import { siteConfig } from '@/config/site'
 export default function HomePage() {
   return (
     <>
-      <HeroSection variant="day" alt="Campo de fútbol de Break Point">
+      <HeroSection variant="day" src="/images/field-day.webp" alt="Campo de fútbol de Break Point">
         <AvailabilityBadge />
         <h1 className="font-heading text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
           {siteConfig.brand.tagline}
