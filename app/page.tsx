@@ -1,5 +1,7 @@
 import { HeroSection } from '@/components/sections/hero-section'
 import { SegmentCards } from '@/components/sections/segment-cards'
+import { AmenitiesGrid } from '@/components/sections/amenities-grid'
+import { GalleryGrid } from '@/components/sections/gallery-grid'
 import { AvailabilityBadge } from '@/components/ui/availability-badge'
 import { WhatsAppButton } from '@/components/ui/whatsapp-button'
 import { siteConfig } from '@/config/site'
@@ -17,10 +19,12 @@ export default function HomePage() {
             {siteConfig.brand.heroSubheadline}
           </p>
         </div>
-        
+
         <WhatsAppButton variant="inline" page="home" />
       </HeroSection>
       <SegmentCards />
+      <AmenitiesGrid />
+      <GalleryGrid />
     </>
   )
 }
