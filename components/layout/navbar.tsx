@@ -54,8 +54,8 @@ export function Navbar() {
                   className={cn(
                     'font-ui text-sm transition-colors',
                     active
-                      ? 'text-primary-500 border-b-2 border-primary-500 pb-0.5'
-                      : 'text-on-surface-var hover:text-on-surface'
+                      ? scrolled ? 'text-primary-500 border-b-2 border-primary-500 pb-0.5' : 'text-white border-b-2 border-white pb-0.5'
+                      : scrolled ? 'text-on-surface-var hover:text-on-surface' : 'text-white/80 hover:text-white'
                   )}
                 >
                   {label}

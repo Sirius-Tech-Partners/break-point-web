@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useEffect, useRef } from 'react'
@@ -31,7 +32,7 @@ export function HeroSection({ src, alt, children }: HeroSectionProps) {
   }, [])
 
   return (
-    <section className="relative h-[100dvh] overflow-hidden">
+    <section className="relative h-dvh overflow-hidden">
       <div ref={parallaxRef} className="absolute inset-0 will-change-transform">
         <VenueImage
           slot="hero"
@@ -40,10 +41,16 @@ export function HeroSection({ src, alt, children }: HeroSectionProps) {
           className="aspect-auto h-full rounded-none"
         />
       </div>
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            'linear-gradient(to bottom, rgba(0,0,0,0.60) 0px, rgba(0,0,0,0.20) 64px, transparent 140px, transparent 55%, rgba(0,0,0,0.50) 100%)',
+        }}
+      />
+      
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-      <div className="relative z-10 flex h-full flex-col items-center justify-end gap-4 px-[var(--spacing-gutter)] pb-[var(--spacing-lg)] text-center text-white">
+      <div className="relative z-10 flex h-full flex-col items-center justify-end gap-4 px-(--spacing-gutter) pb-[25vh] text-center text-white">
         {children}
       </div>
     </section>

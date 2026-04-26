@@ -11,9 +11,12 @@ export default function HomePage() {
         <h1 className="font-heading text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
           {siteConfig.brand.tagline}
         </h1>
-        <p className="max-w-xl font-body text-lg text-white/80">
-          Cancha de fútbol y espacio para eventos en Caliri, Zona Sur, La Paz.
-        </p>
+        <div className="flex w-full justify-center px-4">
+          <p className="text-center text-sm md:text-lg text-white/80">
+            {siteConfig.brand.heroSubheadline}
+          </p>
+        </div>
+        
         <WhatsAppButton variant="inline" page="home" />
       </HeroSection>
     </>

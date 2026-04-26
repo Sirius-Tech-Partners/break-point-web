@@ -4,6 +4,7 @@ export type SiteConfig = {
   brand: {
     name: string
     tagline: string
+    heroSubheadline: string
     locale: string
   }
   contact: {
@@ -53,6 +54,7 @@ export const siteConfig: SiteConfig = {
   brand: {
     name: 'Break Point',
     tagline: 'Juega. Celebra. Disfruta.',
+    heroSubheadline: 'Cancha de fútbol y espacio para eventos en Zona Sur, La Paz.',
     locale: 'es_BO',
   },
   contact: {

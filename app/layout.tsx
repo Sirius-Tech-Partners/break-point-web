@@ -50,7 +50,7 @@ export default function RootLayout({
           Ir al contenido principal
         </a>
         <Navbar />
-        <main id="main-content" className="flex flex-col flex-1 pt-16">
+        <main id="main-content" className="flex flex-col flex-1 ">
           {children}
         </main>
         <Footer />
