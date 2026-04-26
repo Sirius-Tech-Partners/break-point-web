@@ -1,6 +1,9 @@
 import { HeroSection } from '@/components/sections/hero-section'
+import { FieldSpecs } from '@/components/sections/field-specs'
+import { PricingBlock } from '@/components/sections/pricing-block'
 import { AvailabilityBadge } from '@/components/ui/availability-badge'
 import { WhatsAppButton } from '@/components/ui/whatsapp-button'
+import { AnimatedSection } from '@/components/ui/animated-section'
 import { siteConfig } from '@/config/site'
 
 export default function CanchaPage() {
@@ -19,6 +22,14 @@ export default function CanchaPage() {
 
         <WhatsAppButton variant="inline" page="cancha" />
       </HeroSection>
+
+      <AnimatedSection delay={0}>
+        <FieldSpecs />
+      </AnimatedSection>
+
+      <AnimatedSection delay={0.1}>
+        <PricingBlock />
+      </AnimatedSection>
     </>
   )
 }
