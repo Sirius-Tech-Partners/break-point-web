@@ -41,7 +41,7 @@ export default function HomePage() {
 
       <AnimatedSection delay={0.3}>
         <section className="w-full bg-dark py-[var(--spacing-xl)]">
-          <div className="mx-auto flex max-w-(--spacing-container) flex-col items-center gap-6 px-(--spacing-gutter) text-center">
+          <div className="mx-auto w-full flex max-w-(--spacing-container) flex-col items-center gap-6 px-(--spacing-gutter) text-center">
             <h2 className="font-heading text-3xl font-bold text-white md:text-4xl">
               ¿Listo para reservar?
             </h2>
