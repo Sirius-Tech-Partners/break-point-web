@@ -35,6 +35,11 @@ export function EventContactForm() {
   const isSuccess = state && 'success' in state && state.success
   const globalError = state && 'error' in state ? state.error : null
 
+  // Min date: 72 hours (3 days) from today — matches business policy
+  const minDate = new Date()
+  minDate.setDate(minDate.getDate() + 3)
+  const minDateStr = minDate.toISOString().split('T')[0]
+
   // Focus management per NFR-A5
   useEffect(() => {
     if (isSuccess && successRef.current) {
@@ -76,6 +81,13 @@ export function EventContactForm() {
   }
 
   return (
+    <>
+      <h2 className="mb-[var(--spacing-md)] text-center font-heading text-3xl font-bold text-on-surface md:text-4xl">
+        Envianos tu consulta
+      </h2>
+      <p className="mb-[var(--spacing-md)] text-center font-body text-base text-on-surface-var">
+        Completá el formulario y te respondemos con una cotización a medida.
+      </p>
     <form action={action} noValidate className="flex flex-col gap-5">
       {globalError && (
         <div role="alert" className="rounded-lg border border-error/30 bg-error/10 px-4 py-3">
@@ -139,6 +151,7 @@ export function EventContactForm() {
           name="fecha"
           type="date"
           required
+          min={minDateStr}
           aria-describedby={fieldErrors.fecha ? 'fecha-error' : undefined}
           aria-invalid={!!fieldErrors.fecha}
           className={cn('mt-1', inputClass(!!fieldErrors.fecha))}
@@ -222,5 +235,6 @@ export function EventContactForm() {
         )}
       </button>
     </form>
+    </>
   )
 }
