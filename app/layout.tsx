@@ -5,6 +5,7 @@ import { siteConfig } from '@/config/site'
 import { Navbar } from '@/components/layout/navbar'
 import { Footer } from '@/components/layout/footer'
 import { WhatsAppButton } from '@/components/ui/whatsapp-button'
+import { JsonLd } from '@/components/seo/json-ld'
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -53,6 +54,7 @@ export default function RootLayout({
         >
           Ir al contenido principal
         </a>
+        <JsonLd />
         <Navbar />
         <main id="main-content" className="flex flex-col flex-1 ">
           {children}
