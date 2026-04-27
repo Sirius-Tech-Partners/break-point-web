@@ -1,4 +1,12 @@
+import { generateMetadata as buildMetadata } from '@/lib/seo'
 import { HeroSection } from '@/components/sections/hero-section'
+
+export const metadata = buildMetadata({
+  title: 'Break Point — Cancha de Fútbol y Eventos en Zona Sur, La Paz',
+  description:
+    'Alquilá la cancha de fútbol sintético o reservá el espacio para tu evento en Caliri, Zona Sur, La Paz. Confirmación inmediata por WhatsApp.',
+  path: '/',
+})
 import { SegmentCards } from '@/components/sections/segment-cards'
 import { AmenitiesGrid } from '@/components/sections/amenities-grid'
 import { GalleryGrid } from '@/components/sections/gallery-grid'

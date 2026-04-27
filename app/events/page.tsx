@@ -1,3 +1,4 @@
+import { generateMetadata as buildMetadata } from '@/lib/seo'
 import { HeroSection } from '@/components/sections/hero-section'
 import { PricingBlock } from '@/components/sections/pricing-block'
 import { HowItWorks } from '@/components/sections/how-it-works'
@@ -6,6 +7,13 @@ import { EventContactForm } from '@/components/sections/event-contact-form'
 import { WhatsAppButton } from '@/components/ui/whatsapp-button'
 import { AnimatedSection } from '@/components/ui/animated-section'
 import { siteConfig } from '@/config/site'
+
+export const metadata = buildMetadata({
+  title: 'Eventos — Salón, Parrilla y Cancha Sintética · Break Point',
+  description:
+    'Organizá tu cumpleaños, reunión corporativa o celebración en Break Point. Salón, parrilla y cancha sintética en Zona Sur, La Paz. Cotizá sin compromiso.',
+  path: '/events',
+})
 
 export default function EventosPage() {
   return (

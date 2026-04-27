@@ -28,8 +28,12 @@ const lexend = Lexend({
 })
 
 export const metadata: Metadata = {
-  title: siteConfig.seo.defaultTitle,
+  title: {
+    default: siteConfig.seo.defaultTitle,
+    template: '%s · Break Point',
+  },
   description: siteConfig.seo.defaultDescription,
+  metadataBase: new URL(siteConfig.seo.metadataBase),
 }
 
 export default function RootLayout({
