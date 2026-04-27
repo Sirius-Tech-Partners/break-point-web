@@ -1,3 +1,4 @@
+import { generateMetadata as buildMetadata } from '@/lib/seo'
 import { HeroSection } from '@/components/sections/hero-section'
 import { FieldSpecs } from '@/components/sections/field-specs'
 import { PricingBlock } from '@/components/sections/pricing-block'
@@ -7,6 +8,13 @@ import { AvailabilityBadge } from '@/components/ui/availability-badge'
 import { WhatsAppButton } from '@/components/ui/whatsapp-button'
 import { AnimatedSection } from '@/components/ui/animated-section'
 import { siteConfig } from '@/config/site'
+
+export const metadata = buildMetadata({
+  title: 'La Cancha — Fútbol Sintético con Iluminación Nocturna · Break Point',
+  description:
+    'Cancha de fútbol 5 con césped sintético e iluminación nocturna en Zona Sur, La Paz. Horario 08:00–22:00. Reservá por WhatsApp.',
+  path: '/field',
+})
 
 export default function CanchaPage() {
   return (

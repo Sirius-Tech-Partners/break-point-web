@@ -19,7 +19,7 @@ So that search results and social previews accurately represent the page content
 **When** called with `{ title, description, path, locale? }`
 **Then** it returns a Next.js `Metadata` object with: page title, description, `openGraph` (og:title, og:description, og:image 1200×630, og:locale `es_BO`), hreflang `alternates.languages` for `es` and `en`, and canonical URL from `siteConfig.seo.metadataBase`
 
-**Given** `app/page.tsx`, `app/cancha/page.tsx`, and `app/eventos/page.tsx` each call `generateMetadata()`
+**Given** `app/page.tsx`, `app/field/page.tsx`, and `app/events/page.tsx` each call `generateMetadata()`
 **When** the pages are rendered
 **Then** each page has a unique title and description — no two pages share the same metadata
 
@@ -69,7 +69,7 @@ So that I can efficiently crawl and index all Break Point pages.
 
 **Given** `app/sitemap.ts` exists
 **When** `/sitemap.xml` is requested
-**Then** it returns all 3 ES pages (`/`, `/cancha`, `/eventos`) + 3 EN alternates (`/en/`, `/en/cancha`, `/en/eventos`) with `lastModified` timestamps
+**Then** it returns all 3 ES pages (`/`, `/field`, `/events`) + 3 EN alternates (`/en/`, `/en/field`, `/en/events`) with `lastModified` timestamps
 
 **Given** `app/robots.ts` exists
 **When** `/robots.txt` is requested
@@ -111,7 +111,7 @@ So that hreflang alternates are valid and adding English content requires only c
 **When** any `/en/*` route is accessed
 **Then** `lang="en"` is set on the html element and the EN layout renders correctly
 
-**Given** `app/en/page.tsx`, `app/en/cancha/page.tsx`, and `app/en/eventos/page.tsx` exist
+**Given** `app/en/page.tsx`, `app/en/field/page.tsx`, and `app/en/events/page.tsx` exist
 **When** accessed
 **Then** they render placeholder content (EN copy to be added in V2) without errors
 
