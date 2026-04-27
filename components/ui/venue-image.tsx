@@ -7,6 +7,11 @@ const SLOT_ASPECT: Record<'hero' | 'gallery', string> = {
   gallery: 'aspect-[4/3]',
 }
 
+const SLOT_SIZES: Record<'hero' | 'gallery', string> = {
+  hero: '100vw',
+  gallery: '(max-width: 768px) 100vw, 50vw',
+}
+
 const BLUR_PLACEHOLDER =
   'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wAARCAABAAEDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AJQAB/9k='
 
@@ -45,6 +50,8 @@ export function VenueImage({ alt, slot, src, className }: VenueImageProps) {
         className="object-cover"
         placeholder="blur"
         blurDataURL={BLUR_PLACEHOLDER}
+        sizes={SLOT_SIZES[slot]}
+        priority={slot === 'hero'}
       />
     </div>
   )
