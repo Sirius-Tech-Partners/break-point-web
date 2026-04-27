@@ -107,6 +107,14 @@ So that the owner receives complete information and can respond quickly.
 **When** a visitor has not selected an option
 **Then** the default "Seleccioná una opción" option is `disabled` — cannot be re-selected after a valid choice
 
+**Given** the Fecha del evento field renders
+**When** a visitor opens the date picker
+**Then** dates before today + 3 days are not selectable (`min` attribute set dynamically)
+
+**Given** a visitor submits a date less than 72 hours from now
+**When** Zod validates the fecha field
+**Then** the error "La fecha debe ser con al menos 3 días de anticipación" appears inline — enforces the business policy from product-brief-distillate.md line 31
+
 **Prerequisites:** `zod ≥ 4.0.0` in `package.json` (verify before implementing)
 **Note:** Stories 4.3 and 4.5 are delivered as a single commit — they implement one component (`event-contact-form.tsx`) with all states.
 

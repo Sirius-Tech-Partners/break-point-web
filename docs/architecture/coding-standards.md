@@ -151,6 +151,38 @@ type PriceValue = number | 'TBD'
   - Story N = **validates** (Zod safeParse → `{ errors }`)
   - Story N+1 = **sends** (rate limit → external API → `{ success }`)
 
+### Business Rules Must Reach the Schema (CRITICAL)
+
+Every business rule from the product brief or client brief **must be explicitly mapped to a Zod validation** in the schema. "The field exists" is not enough — the constraints matter.
+
+Checklist for every date/time field in a form:
+- [ ] Can the user submit a past date? → add `.refine()` for future-only
+- [ ] Is there a minimum advance notice? → add `.refine()` with the business rule (e.g. 72h, 1 week)
+- [ ] Is there a maximum horizon? → add `.refine()` if applicable
+- [ ] Does the `<input>` have a `min` attribute that matches the schema rule?
+
+Pattern for date fields with advance notice requirement:
+```ts
+fecha: z
+  .string()
+  .min(1, 'La fecha es requerida')
+  .refine(val => {
+    const event = new Date(val + 'T00:00:00')
+    const min = new Date()
+    min.setDate(min.getDate() + N) // N = days required in advance
+    min.setHours(0, 0, 0, 0)
+    return event >= min
+  }, `La fecha debe ser con al menos ${N} días de anticipación`),
+```
+
+The `min` attribute on the `<input type="date">` must be calculated dynamically in the client component to match:
+```tsx
+const minDate = new Date()
+minDate.setDate(minDate.getDate() + N)
+const minDateStr = minDate.toISOString().split('T')[0]
+// <input type="date" min={minDateStr} ... />
+```
+
 ## Security Rules
 
 - Rate limiting always first in Server Actions

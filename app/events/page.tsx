@@ -38,12 +38,6 @@ export default function EventosPage() {
         <section className="w-full bg-surface py-[var(--spacing-xl)]">
           <div className="mx-auto max-w-[var(--spacing-container)] px-[var(--spacing-gutter)]">
             <div className="mx-auto max-w-[640px]">
-              <h2 className="mb-[var(--spacing-md)] text-center font-heading text-3xl font-bold text-on-surface md:text-4xl">
-                Envianos tu consulta
-              </h2>
-              <p className="mb-[var(--spacing-md)] text-center font-body text-base text-on-surface-var">
-                Completá el formulario y te respondemos con una cotización a medida.
-              </p>
               <EventContactForm />
             </div>
           </div>

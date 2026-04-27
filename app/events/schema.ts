@@ -8,7 +8,16 @@ export const contactSchema = z.object({
     .string()
     .min(1, 'El teléfono es requerido')
     .regex(phoneRegex, 'Ingresá un número boliviano válido (ej. 70690685)'),
-  fecha: z.string().min(1, 'La fecha del evento es requerida'),
+  fecha: z
+    .string()
+    .min(1, 'La fecha del evento es requerida')
+    .refine(val => {
+      const event = new Date(val + 'T00:00:00')
+      const min = new Date()
+      min.setDate(min.getDate() + 3)
+      min.setHours(0, 0, 0, 0)
+      return event >= min
+    }, 'La fecha debe ser con al menos 3 días de anticipación'),
   tipo: z.enum(['cumpleanos', 'corporativo', 'social', 'otro'], {
     error: 'Seleccioná un tipo de evento',
   }),
