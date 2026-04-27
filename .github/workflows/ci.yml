@@ -62,3 +62,9 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+      # Gate 6 — Lighthouse CI (informational — never blocks merge)
+      - name: Lighthouse CI
+        run: pnpm exec lhci autorun || true
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
