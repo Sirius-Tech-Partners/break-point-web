@@ -20,14 +20,14 @@ export function AnimatedSection({
   const shouldReduceMotion = useReducedMotion()
 
   return (
-    <motion.section
-      className={className}
+    <motion.div
+      className={`w-full${className ? ` ${className}` : ''}`}
       initial={{ opacity: 0, y: shouldReduceMotion ? 0 : yOffset }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration, delay, ease: 'easeOut' }}
     >
       {children}
-    </motion.section>
+    </motion.div>
   )
 }
