@@ -6,6 +6,7 @@ export type SiteConfig = {
     tagline: string
     heroSubheadline: string
     canchaSubheadline: string
+    eventosSubheadline: string
     locale: string
   }
   contact: {
@@ -57,6 +58,7 @@ export const siteConfig: SiteConfig = {
     tagline: 'Juega. Celebra. Disfruta.',
     heroSubheadline: 'Cancha de fútbol y espacio para eventos en Zona Sur, La Paz.',
     canchaSubheadline: 'Césped sintético · Iluminación nocturna · Zona Sur, La Paz',
+    eventosSubheadline: 'Salón · Parrilla · Cancha sintética · Zona Sur, La Paz',
     locale: 'es_BO',
   },
   contact: {
