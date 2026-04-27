@@ -3,7 +3,7 @@
 Event organizers (birthday parents, corporate coordinators) see space combinations, understand the pricing model, and contact the owner via WhatsApp (primary) or a structured form that delivers a complete lead to the owner's email (secondary).
 
 **FRs covered:** FR9 · FR10 · FR15 · FR16 · FR17 · FR18 · FR19 · FR20 · FR21
-**Includes:** `<HeroSection>` (day variant), `<PricingBlock eventos>` (4 combinations), `<HowItWorks eventos>`, `<LocationSection>`, `<ContactForm>` (useActionState + Zod + Resend + Upstash), app/eventos/page.tsx + actions.ts + schema.ts
+**Includes:** `<HeroSection>` (day variant), `<PricingBlock eventos>` (4 combinations), `<HowItWorks eventos>`, `<LocationSection>`, `<ContactForm>` (useActionState + Zod + Resend + Upstash), app/events/page.tsx + actions.ts + schema.ts
 
 ---
 
@@ -15,7 +15,7 @@ So that I can identify which combination fits my event before contacting.
 
 **Acceptance Criteria:**
 
-**Given** a visitor opens `/eventos`
+**Given** a visitor opens `/events`
 **When** the page loads
 **Then** a full-viewport (`h-[100dvh]`) daytime venue photo (`priority` prop, `<HeroSection variant="day">`) fills the screen with H1 "Eventos" and a positioning subheadline
 
@@ -75,7 +75,7 @@ So that the owner receives complete information and can respond quickly.
 
 **Acceptance Criteria:**
 
-**Given** the `<ContactForm>` renders on `/eventos`
+**Given** the `<ContactForm>` renders on `/events`
 **When** a visitor sees it
 **Then** the following fields are present: Nombre (required) · Teléfono (required, Bolivian format) · Fecha del evento (date picker, required) · Tipo de evento (select: Cumpleaños infantil / Evento corporativo / Reunión social / Otro) · Nro de invitados (optional number) · Mensaje (optional, 300 char max)
 
@@ -95,9 +95,20 @@ So that the owner receives complete information and can respond quickly.
 **When** the Server Action is pending
 **Then** the submit button is disabled with a spinner icon and "Enviando…" text — `isPending` from `useActionState` only, no additional `useState`
 
-**Given** `app/eventos/schema.ts` exports the Zod schema
+**Given** `app/events/schema.ts` exports the Zod schema
 **When** used in both `event-contact-form.tsx` (client) and `actions.ts` (server)
 **Then** the same validation rules apply on both sides — no duplication
+
+**Given** the form renders
+**When** a visitor sees required fields marked with `*`
+**Then** a visible legend reads "Los campos con * son obligatorios" — no field meaning is left implicit
+
+**Given** the Tipo de evento select renders
+**When** a visitor has not selected an option
+**Then** the default "Seleccioná una opción" option is `disabled` — cannot be re-selected after a valid choice
+
+**Prerequisites:** `zod ≥ 4.0.0` in `package.json` (verify before implementing)
+**Note:** Stories 4.3 and 4.5 are delivered as a single commit — they implement one component (`event-contact-form.tsx`) with all states.
 
 ---
 
@@ -155,7 +166,7 @@ So that I know my inquiry was received and have a WhatsApp alternative if I pref
 **When** the error state renders
 **Then** a red banner (`--color-error`) shows "Algo salió mal. Intentá de nuevo." — no technical error details exposed
 
-**Given** `app/eventos/page.tsx` is built
+**Given** `app/events/page.tsx` is built
 **When** `pnpm build` runs
 **Then** the page shell is statically generated — sections: HeroSection → PricingBlock → HowItWorks → LocationSection → ContactForm → WhatsApp CTA
 
