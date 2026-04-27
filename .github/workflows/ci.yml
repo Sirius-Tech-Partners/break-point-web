@@ -49,6 +49,11 @@ jobs:
         run: pnpm test:e2e
         env:
           CI: true
+          # Optional: configure these secrets in GitHub Actions to enable test 5 (form success)
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          CONTACT_RECEIVER_EMAIL: ${{ secrets.CONTACT_RECEIVER_EMAIL }}
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
