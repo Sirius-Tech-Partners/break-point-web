@@ -18,7 +18,7 @@ export const metadata = buildMetadata({
 export default function EventosPage() {
   return (
     <>
-      <HeroSection variant="day" alt="Espacio para eventos en Break Point — salón, parrilla y cancha">
+      <HeroSection variant="day" src="/images/events-hall.webp" alt="Espacio para eventos en Break Point — salón, parrilla y cancha">
         <h1 className="font-heading text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
           Eventos
         </h1>

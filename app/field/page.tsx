@@ -19,7 +19,7 @@ export const metadata = buildMetadata({
 export default function CanchaPage() {
   return (
     <>
-      <HeroSection variant="night" alt="Cancha de fútbol nocturna con iluminación en Break Point">
+      <HeroSection variant="night" src="/images/field-night.webp" alt="Cancha de fútbol nocturna con iluminación en Break Point">
         <AvailabilityBadge />
         <h1 className="font-heading text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
           La Cancha
