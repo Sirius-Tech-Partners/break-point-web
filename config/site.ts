@@ -97,7 +97,7 @@ export const siteConfig: SiteConfig = {
     },
   },
   seo: {
-    metadataBase: 'https://breakpointlapaz.com',
+    metadataBase: 'https://break-point-web.vercel.app',
     defaultTitle: 'Break Point — Cancha y Eventos en La Paz',
     defaultDescription:
       'Alquiler de cancha de fútbol y espacio para eventos en Caliri, Zona Sur, La Paz. Reservá por WhatsApp.',

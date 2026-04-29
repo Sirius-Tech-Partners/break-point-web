@@ -26,6 +26,9 @@ export function generateMetadata({
       },
     },
     openGraph: {
+      type: 'website',
+      siteName: siteConfig.brand.name,
+      url: canonical,
       title,
       description,
       locale: siteConfig.brand.locale,
@@ -34,6 +37,7 @@ export function generateMetadata({
           url: `${base}${siteConfig.seo.ogImage}`,
           width: 1200,
           height: 630,
+          alt: siteConfig.brand.name,
         },
       ],
     },
