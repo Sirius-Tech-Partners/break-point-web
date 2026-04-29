@@ -35,6 +35,11 @@ export const metadata: Metadata = {
   },
   description: siteConfig.seo.defaultDescription,
   metadataBase: new URL(siteConfig.seo.metadataBase),
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
 }
 
 export default function RootLayout({
