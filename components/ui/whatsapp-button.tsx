@@ -31,7 +31,7 @@ export function WhatsAppButton({ variant, page }: WhatsAppButtonProps) {
         rel="noopener noreferrer"
         aria-label="Contactar por WhatsApp"
         style={{ bottom: 'calc(1.5rem + env(safe-area-inset-bottom))' }}
-        className="lg:hidden fixed right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-cta shadow-lg transition-transform hover:scale-105 will-change-transform"
+        className="md:hidden fixed right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-cta shadow-lg transition-transform hover:scale-105 will-change-transform"
       >
         <MessageCircle size={24} className="text-white" aria-hidden="true" />
       </a>
@@ -44,7 +44,7 @@ export function WhatsAppButton({ variant, page }: WhatsAppButtonProps) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Contactar por WhatsApp"
-      className="hidden lg:inline-flex items-center gap-2 rounded-full bg-cta px-6 py-3 font-ui font-medium text-white transition-opacity hover:opacity-90"
+      className="hidden lg:inline-flex items-center gap-2 rounded-full bg-cta px-6 py-3 font-ui font-medium text-on-surface transition-opacity hover:opacity-90"
     >
       <MessageCircle size={20} aria-hidden="true" />
       <span>Contactar por WhatsApp</span>
