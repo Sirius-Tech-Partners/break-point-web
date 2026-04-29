@@ -3,11 +3,11 @@ import { VenueImage } from '@/components/ui/venue-image'
 
 const GALLERY_ITEMS = [
   { src: '/images/gallery-field-full.webp', alt: 'Cancha de fútbol Break Point — vista general', delay: 0 },
-  { src: undefined, alt: 'Iluminación nocturna de la cancha', delay: 0.05 },
-  { src: undefined, alt: 'Salón para eventos y celebraciones', delay: 0.1 },
+  { src: '/images/gallery-field-night.webp', alt: 'Iluminación nocturna de la cancha', delay: 0.05 },
+  { src: '/images/gallery-events-hall.webp', alt: 'Salón para eventos y celebraciones', delay: 0.1 },
   { src: '/images/gallery-grill.webp', alt: 'Área de parrilla y esparcimiento', delay: 0.15 },
   { src: '/images/gallery-kitchen.webp', alt: 'Cocina equipada del complejo', delay: 0.2 },
-  { src: undefined, alt: 'Instalaciones generales Break Point', delay: 0.25 },
+  { src: '/images/gallery-facilities.webp', alt: 'Instalaciones generales Break Point', delay: 0.25 },
 ]
 
 export function GalleryGrid() {
